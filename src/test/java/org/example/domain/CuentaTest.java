@@ -11,17 +11,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class CuentaTest {
 
     @Test
-    void testNombreCuenta(){
+    void testNombreCuenta() {
         Cuenta cuenta = new Cuenta();
         cuenta.setPersona("Daniel");
-        assertEquals("Daniel",cuenta.getPersona());
+        assertEquals("Daniel", cuenta.getPersona());
     }
 
     @Test
     void testSaldoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("0"));
         cuenta.setSaldo(new BigDecimal("1000.0"));
-        assertEquals(1000.0,cuenta.getSaldo().doubleValue());
+        assertEquals(1000.0, cuenta.getSaldo().doubleValue());
     }
 
     @Test
@@ -36,7 +36,7 @@ class CuentaTest {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.debito(new BigDecimal("100.0"));
         assertNotNull(cuenta.getSaldo());
-        assertEquals(900.0,cuenta.getSaldo().doubleValue());
+        assertEquals(900.0, cuenta.getSaldo().doubleValue());
     }
 
     @Test
@@ -44,7 +44,7 @@ class CuentaTest {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.credito(new BigDecimal("100.0"));
         assertNotNull(cuenta.getSaldo());
-        assertEquals(1100.0,cuenta.getSaldo().doubleValue());
+        assertEquals(1100.0, cuenta.getSaldo().doubleValue());
     }
 
     @Test
@@ -58,8 +58,8 @@ class CuentaTest {
 
     @Test
     void testTransferirDineroCuentas() {
-        Cuenta cuenta  = new Cuenta("Andres Gomez", new BigDecimal("2500"));
-        Cuenta cuenta2  = new Cuenta("Jesus Ramirez", new BigDecimal("3500"));
+        Cuenta cuenta = new Cuenta("Andres Gomez", new BigDecimal("2500"));
+        Cuenta cuenta2 = new Cuenta("Jesus Ramirez", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.transferir(cuenta, cuenta2, new BigDecimal(500));
         assertEquals("2000", cuenta.getSaldo().toPlainString());
@@ -68,8 +68,8 @@ class CuentaTest {
 
     @Test
     void testTranferirSaldoNegativo() {
-        Cuenta cuenta  = new Cuenta("Andres", new BigDecimal("2500"));
-        Cuenta cuenta2  = new Cuenta("Andres", new BigDecimal("3500"));
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
+        Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("3500"));
         Banco banco = new Banco();
         Exception exception = assertThrows(SaldoNegativoException.class, () -> {
             banco.transferir(cuenta, cuenta2, new BigDecimal(-500));
@@ -79,8 +79,8 @@ class CuentaTest {
 
     @Test
     void testRelacionBancoCuentas() {
-        Cuenta cuenta  = new Cuenta("Andres", new BigDecimal("2500"));
-        Cuenta cuenta2  = new Cuenta("Jorge", new BigDecimal("3500"));
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
+        Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.setNombre("Banco de la republica");
         banco.add(cuenta);
@@ -91,16 +91,24 @@ class CuentaTest {
 
     @Test
     void testRelacionPersonBanco() {
-        Cuenta cuenta  = new Cuenta("Andres", new BigDecimal("2500"));
-        Cuenta cuenta2  = new Cuenta("Jorge", new BigDecimal("3500"));
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
+        Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.setNombre("Banco de la republica");
         banco.add(cuenta);
         banco.add(cuenta2);
 
-        assertEquals("Andres", banco.getCuentas().stream()
-                .filter(c -> "Andres".equals(c.getPersona()))
-                .findFirst().get().getPersona()
+        assertAll(
+                () -> {
+                    assertEquals("Andres", banco.getCuentas().stream()
+                            .filter(c -> "Andres".equals(c.getPersona()))
+                            .findFirst().get().getPersona()
+                    );
+                },
+                () -> {
+                    assertTrue(banco.getCuentas().stream()
+                            .anyMatch(c -> c.getPersona().equals("Andres")));
+                }
         );
     }
 }
