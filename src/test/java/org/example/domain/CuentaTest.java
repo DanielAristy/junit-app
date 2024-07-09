@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
@@ -87,6 +88,17 @@ class CuentaTest {
     @ValueSource(strings = {"100", "200", "300", "400", "500"})
     @DisplayName("Debitando de la cuenta parametrizado")
     void testDebitoCuentaParametrizado(String monto) {
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+    @CsvSource({"1,100", "2,200", "3,300", "4,400", "5,500"})
+    @DisplayName("Debitando de la cuenta parametrizado")
+    void testDebitoCuentaParametrizadoCsv(String index, String monto) {
+        System.out.println(index + " -> " + monto);
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.debito(new BigDecimal(monto));
         assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
