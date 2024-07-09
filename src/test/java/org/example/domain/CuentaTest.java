@@ -88,6 +88,7 @@ class CuentaTest {
         assertEquals(900.0, cuenta.getSaldo().doubleValue(), "El saldo debe ser 900 despues del debito");
     }
 
+    @Tag("param")
     @Nested
     class PruebasParametrizadas{
         @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
@@ -230,7 +231,7 @@ class CuentaTest {
         );
     }
 
-
+    @Tag("properties")
     @Nested
     class PropiedadesSistemaTest {
 
