@@ -22,6 +22,16 @@ class CuentaTest {
         System.out.println("finalizando el metodo de prueba");
     }
 
+    @BeforeAll
+    static void beforeAll() {
+        System.out.println("inicializando el test");
+    }
+
+    @AfterAll
+    static void afterAll() {
+        System.out.println("finalizando el test");
+    }
+
     @Test
     @DisplayName("Probando el nombre de la cuenta")
     void testNombreCuenta() {
