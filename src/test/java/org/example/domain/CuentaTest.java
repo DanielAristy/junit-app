@@ -12,21 +12,25 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 class CuentaTest {
     Cuenta cuenta;
+    private TestInfo info;
+    private TestReporter testReporter;
 
     @BeforeEach
-    void initTest() {
-        System.out.println("iniciando el metodo");
+    void initTest(TestInfo info, TestReporter testReporter) {
+        this.info = info;
+        this.testReporter = testReporter;
+        testReporter.publishEntry("iniciando el metodo");
         this.cuenta = new Cuenta("Andres", new BigDecimal("2500"));
+        testReporter.publishEntry("Ejecutando: " + info.getDisplayName() + " " +
+                info.getTestMethod().orElse(null).getName() + " con las etiquetas " +
+                info.getTags());
     }
 
     @AfterEach
@@ -44,9 +48,12 @@ class CuentaTest {
         System.out.println("finalizando el test");
     }
 
+    @Tag("cuenta")
     @Test
     @DisplayName("Probando el nombre de la cuenta")
     void testNombreCuenta() {
+        if (info.getTags().contains("cuenta")) testReporter.publishEntry("hace algo en el metodo " + info.getTestMethod());
+
         Cuenta cuenta = new Cuenta();
         cuenta.setPersona("Daniel");
         assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
