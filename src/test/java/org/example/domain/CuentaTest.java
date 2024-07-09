@@ -5,6 +5,8 @@ import org.example.exceptions.SaldoNegativoException;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
 import java.util.Map;
@@ -79,6 +81,16 @@ class CuentaTest {
         cuenta.debito(new BigDecimal("100.0"));
         assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
         assertEquals(900.0, cuenta.getSaldo().doubleValue(), "El saldo debe ser 900 despues del debito");
+    }
+
+    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+    @ValueSource(strings = {"100", "200", "300", "400", "500"})
+    @DisplayName("Debitando de la cuenta parametrizado")
+    void testDebitoCuentaParametrizado(String monto) {
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
     }
 
     @Test
