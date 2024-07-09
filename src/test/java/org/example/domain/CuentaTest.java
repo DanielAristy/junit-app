@@ -3,9 +3,11 @@ package org.example.domain;
 import org.example.exceptions.SaldoInsuficienteException;
 import org.example.exceptions.SaldoNegativoException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -153,5 +155,16 @@ class CuentaTest {
     @Test
     @EnabledIfSystemProperty(named = "java.version", matches = "17.0.11")
     void testJavaVersion() {
+    }
+
+    @Test
+    void imprimirVariablesAmbiente() {
+        Map<String, String> getenv = System.getenv();
+        getenv.forEach((key, value) -> System.out.println(key + ":" + value));
+    }
+
+    @Test
+    @DisabledIfEnvironmentVariable(named = "JAVA_HOME", matches = "C:\\Program Files\\Java\\jdk-21.0.2")
+    void testJavaHome() {
     }
 }
