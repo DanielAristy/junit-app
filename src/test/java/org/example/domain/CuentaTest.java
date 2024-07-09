@@ -2,15 +2,25 @@ package org.example.domain;
 
 import org.example.exceptions.SaldoInsuficienteException;
 import org.example.exceptions.SaldoNegativoException;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CuentaTest {
+    Cuenta cuenta;
+
+    @BeforeEach
+    void initTest(){
+        System.out.println("iniciando el metodo");
+        this.cuenta = new Cuenta("Andres", new BigDecimal("2500"));;
+    }
+
+    @AfterEach
+    void finishTest(){
+        System.out.println("finalizando el metodo de prueba");
+    }
 
     @Test
     @DisplayName("Probando el nombre de la cuenta")
@@ -67,7 +77,6 @@ class CuentaTest {
     @Test
     @DisplayName("Probando la transferencia entre cuentas")
     void testTransferirDineroCuentas() {
-        Cuenta cuenta = new Cuenta("Andres Gomez", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jesus Ramirez", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.transferir(cuenta, cuenta2, new BigDecimal(500));
@@ -78,7 +87,6 @@ class CuentaTest {
     @Test
     @DisplayName("Probando una transferencia negativa entre cuentas")
     void testTranferirSaldoNegativo() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("3500"));
         Banco banco = new Banco();
         Exception exception = assertThrows(SaldoNegativoException.class, () -> {
@@ -91,7 +99,6 @@ class CuentaTest {
     @DisplayName("Probando relacion entre banco y cuentas")
     @Disabled
     void testRelacionBancoCuentas() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.setNombre("Banco de la republica");
@@ -104,7 +111,6 @@ class CuentaTest {
     @Test
     @DisplayName("Probando relacion entre las cuentas y banco")
     void testRelacionPersonBanco() {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
         Banco banco = new Banco();
         banco.setNombre("Banco de la republica");
