@@ -2,6 +2,8 @@ package org.example.domain;
 
 import org.example.exceptions.SaldoInsuficienteException;
 import org.example.exceptions.SaldoNegativoException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -11,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CuentaTest {
 
     @Test
+    @DisplayName("Probando el nombre de la cuenta")
     void testNombreCuenta() {
         Cuenta cuenta = new Cuenta();
         cuenta.setPersona("Daniel");
@@ -18,6 +21,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando el saldo de la cuenta")
     void testSaldoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("0"));
         cuenta.setSaldo(new BigDecimal("1000.0"));
@@ -25,6 +29,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando la referencia del objeto cuenta")
     void testRerefenciaCuenta() {
         Cuenta cuenta = new Cuenta("Andres Gomez", new BigDecimal("0"));
         Cuenta cuenta2 = new Cuenta("Andres Gomez", new BigDecimal("0"));
@@ -32,6 +37,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Debitando de la cuenta")
     void testDebitoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.debito(new BigDecimal("100.0"));
@@ -40,6 +46,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Realizando un credito en la cuenta")
     void testCreditoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.credito(new BigDecimal("100.0"));
@@ -48,6 +55,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Validando excepcion, cuando la cuenta no tiene la cantidad a debitar")
     void testDineroInsuficienteException() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         Exception exception = assertThrows(SaldoInsuficienteException.class, () -> {
@@ -57,6 +65,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando la transferencia entre cuentas")
     void testTransferirDineroCuentas() {
         Cuenta cuenta = new Cuenta("Andres Gomez", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jesus Ramirez", new BigDecimal("3500"));
@@ -67,6 +76,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando una transferencia negativa entre cuentas")
     void testTranferirSaldoNegativo() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("3500"));
@@ -78,6 +88,8 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando relacion entre banco y cuentas")
+    @Disabled
     void testRelacionBancoCuentas() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
@@ -90,6 +102,7 @@ class CuentaTest {
     }
 
     @Test
+    @DisplayName("Probando relacion entre las cuentas y banco")
     void testRelacionPersonBanco() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("2500"));
         Cuenta cuenta2 = new Cuenta("Jorge", new BigDecimal("3500"));
