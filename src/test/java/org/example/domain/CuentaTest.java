@@ -88,39 +88,71 @@ class CuentaTest {
         assertEquals(900.0, cuenta.getSaldo().doubleValue(), "El saldo debe ser 900 despues del debito");
     }
 
-    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
-    @ValueSource(strings = {"100", "200", "300", "400", "500"})
-    @DisplayName("Debitando de la cuenta parametrizado")
-    void testDebitoCuentaParametrizado(String monto) {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
-        cuenta.debito(new BigDecimal(monto));
-        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
-        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    @Nested
+    class PruebasParametrizadas{
+        @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+        @ValueSource(strings = {"100", "200", "300", "400", "500"})
+        @DisplayName("Debitando de la cuenta parametrizado")
+        void testDebitoCuentaParametrizado(String monto) {
+            Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+            cuenta.debito(new BigDecimal(monto));
+            assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+            assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+        @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+        @CsvSource({"100,Daniel,Daniel", "200,Juan,Juan", "300,Pedro,Pedro"})
+        @DisplayName("Debitando de la cuenta parametrizado csv source")
+        void testDebitoCuentaParametrizadoCsvSource(String monto, String esperado, String actual) {
+            Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+            cuenta.setPersona(actual);
+            cuenta.debito(new BigDecimal(monto));
+            assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+            assertNotNull(cuenta.getPersona());
+            assertEquals(esperado,actual);
+            assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+
+        @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+        @CsvFileSource(resources = "/data.csv")
+        @DisplayName("Debitando de la cuenta parametrizado csv")
+        void testDebitoCuentaParametrizadoCsvFile(String monto) {
+            Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+            cuenta.debito(new BigDecimal(monto));
+            assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+            assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+        @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+        @CsvFileSource(resources = "/data2.csv")
+        @DisplayName("Debitando de la cuenta parametrizado csv2")
+        void testDebitoCuentaParametrizadoCsvFile2(String monto, String esperado, String actual) {
+            Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+            cuenta.setPersona(actual);
+            cuenta.debito(new BigDecimal(monto));
+            assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+            assertNotNull(cuenta.getPersona());
+            assertEquals(esperado,actual);
+            assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+        @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+        @MethodSource("montoList")
+        @DisplayName("Debitando de la cuenta parametrizado csv")
+        void testDebitoCuentaParametrizadoMethodSource(String monto) {
+            Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+            cuenta.debito(new BigDecimal(monto));
+            assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+            assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+        }
+
+        static List<String> montoList(){
+            return Arrays.asList("100", "200", "300", "400", "500");
+        }
     }
 
-    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
-    @CsvFileSource(resources = "/data.csv")
-    @DisplayName("Debitando de la cuenta parametrizado csv")
-    void testDebitoCuentaParametrizadoCsvFile(String monto) {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
-        cuenta.debito(new BigDecimal(monto));
-        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
-        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
-    }
 
-    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
-    @MethodSource("montoList")
-    @DisplayName("Debitando de la cuenta parametrizado csv")
-    void testDebitoCuentaParametrizadoMethodSource(String monto) {
-        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
-        cuenta.debito(new BigDecimal(monto));
-        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
-        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
-    }
-
-    static List<String> montoList(){
-        return Arrays.asList("100", "200", "300", "400", "500");
-    }
 
     @Test
     @DisplayName("Realizando un credito en la cuenta")
