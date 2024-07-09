@@ -8,9 +8,12 @@ import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -103,6 +106,20 @@ class CuentaTest {
         cuenta.debito(new BigDecimal(monto));
         assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
         assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    @ParameterizedTest(name = "numero {index} ejecutando con el valor {0} - {argumentsWithNames}")
+    @MethodSource("montoList")
+    @DisplayName("Debitando de la cuenta parametrizado csv")
+    void testDebitoCuentaParametrizadoMethodSource(String monto) {
+        Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
+        cuenta.debito(new BigDecimal(monto));
+        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+        assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+    }
+
+    static List<String> montoList(){
+        return Arrays.asList("100", "200", "300", "400", "500");
     }
 
     @Test
