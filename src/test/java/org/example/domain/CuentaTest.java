@@ -147,49 +147,52 @@ class CuentaTest {
         );
     }
 
-    @Test
-    void imprimirSystemProperties() {
-        Properties properties = System.getProperties();
-        properties.forEach((key, value) -> System.out.println(key + ":" + value));
-    }
 
-    @Test
-    @EnabledIfSystemProperty(named = "java.version", matches = "17.0.11")
-    void testJavaVersion() {
-    }
+    @Nested
+    class PropiedadesSistemaTest {
 
-    @Test
-    void imprimirVariablesAmbiente() {
-        Map<String, String> getenv = System.getenv();
-        getenv.forEach((key, value) -> System.out.println(key + ":" + value));
-    }
+        @Test
+        void imprimirSystemProperties() {
+            Properties properties = System.getProperties();
+            properties.forEach((key, value) -> System.out.println(key + ":" + value));
+        }
 
-    @Test
-    @DisabledIfEnvironmentVariable(named = "JAVA_HOME", matches = ".*jdk-21.0.2.*")
-    void testJavaHome() {
-    }
+        @Test
+        @EnabledIfSystemProperty(named = "java.version", matches = "17.0.11")
+        void testJavaVersion() {
+        }
 
-    @Test
-    @DisplayName("Probando el nombre de la cuenta en el ambiente Dev")
-    void testNombreCuentaDev() {
-        Boolean esDev = "dev".equals(System.getProperty("ENV"));
-        assumeTrue(esDev);
-        Cuenta cuenta = new Cuenta();
-        cuenta.setPersona("Daniel");
-        assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
-    }
+        @Test
+        void imprimirVariablesAmbiente() {
+            Map<String, String> getenv = System.getenv();
+            getenv.forEach((key, value) -> System.out.println(key + ":" + value));
+        }
 
-    @Test
-    @DisplayName("Probando el nombre de la cuenta en el ambiente Dev 2")
-    void testNombreCuentaDev2() {
-        Boolean esDev = "dev".equals(System.getProperty("ENV"));
-        assumingThat(esDev, () -> {
+        @Test
+        @DisabledIfEnvironmentVariable(named = "JAVA_HOME", matches = ".*jdk-21.0.2.*")
+        void testJavaHome() {
+        }
+
+        @Test
+        @DisplayName("Probando el nombre de la cuenta en el ambiente Dev")
+        void testNombreCuentaDev() {
+            Boolean esDev = "dev".equals(System.getProperty("ENV"));
+            assumeTrue(esDev);
             Cuenta cuenta = new Cuenta();
             cuenta.setPersona("Daniel");
             assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
-        });
+        }
 
+        @Test
+        @DisplayName("Probando el nombre de la cuenta en el ambiente Dev 2")
+        void testNombreCuentaDev2() {
+            Boolean esDev = "dev".equals(System.getProperty("ENV"));
+            assumingThat(esDev, () -> {
+                Cuenta cuenta = new Cuenta();
+                cuenta.setPersona("Daniel");
+                assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
+            });
+
+        }
     }
-
-
 }
