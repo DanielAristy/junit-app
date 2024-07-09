@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 class CuentaTest {
     Cuenta cuenta;
@@ -164,7 +165,31 @@ class CuentaTest {
     }
 
     @Test
-    @DisabledIfEnvironmentVariable(named = "JAVA_HOME", matches = "C:\\Program Files\\Java\\jdk-21.0.2")
+    @DisabledIfEnvironmentVariable(named = "JAVA_HOME", matches = ".*jdk-21.0.2.*")
     void testJavaHome() {
     }
+
+    @Test
+    @DisplayName("Probando el nombre de la cuenta en el ambiente Dev")
+    void testNombreCuentaDev() {
+        Boolean esDev = "dev".equals(System.getProperty("ENV"));
+        assumeTrue(esDev);
+        Cuenta cuenta = new Cuenta();
+        cuenta.setPersona("Daniel");
+        assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
+    }
+
+    @Test
+    @DisplayName("Probando el nombre de la cuenta en el ambiente Dev 2")
+    void testNombreCuentaDev2() {
+        Boolean esDev = "dev".equals(System.getProperty("ENV"));
+        assumingThat(esDev, () -> {
+            Cuenta cuenta = new Cuenta();
+            cuenta.setPersona("Daniel");
+            assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
+        });
+
+    }
+
+
 }
