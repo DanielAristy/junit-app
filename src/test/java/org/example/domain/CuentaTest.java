@@ -20,7 +20,6 @@ class CuentaTest {
     void initTest() {
         System.out.println("iniciando el metodo");
         this.cuenta = new Cuenta("Andres", new BigDecimal("2500"));
-        ;
     }
 
     @AfterEach
@@ -41,6 +40,17 @@ class CuentaTest {
     @Test
     @DisplayName("Probando el nombre de la cuenta")
     void testNombreCuenta() {
+        Cuenta cuenta = new Cuenta();
+        cuenta.setPersona("Daniel");
+        assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
+    }
+
+    @RepeatedTest(value = 2, name = "Repeticion numero {currentRepetition} de {totalRepetitions}")
+    @DisplayName("Probando el nombre de la cuenta repetido")
+    void testNombreCuentaRepetido(RepetitionInfo info) {
+        if (info.getCurrentRepetition() == 2){
+            System.out.println("estamos en la repeticion " + info.getCurrentRepetition());
+        }
         Cuenta cuenta = new Cuenta();
         cuenta.setPersona("Daniel");
         assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
