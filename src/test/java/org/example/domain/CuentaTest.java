@@ -14,7 +14,7 @@ class CuentaTest {
     void testNombreCuenta() {
         Cuenta cuenta = new Cuenta();
         cuenta.setPersona("Daniel");
-        assertEquals("Daniel", cuenta.getPersona());
+        assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
     }
 
     @Test
@@ -35,8 +35,8 @@ class CuentaTest {
     void testDebitoCuenta() {
         Cuenta cuenta = new Cuenta("Andres", new BigDecimal("1000"));
         cuenta.debito(new BigDecimal("100.0"));
-        assertNotNull(cuenta.getSaldo());
-        assertEquals(900.0, cuenta.getSaldo().doubleValue());
+        assertNotNull(cuenta.getSaldo(), () -> "El saldo no puede nulo");
+        assertEquals(900.0, cuenta.getSaldo().doubleValue(), "El saldo debe ser 900 despues del debito");
     }
 
     @Test
