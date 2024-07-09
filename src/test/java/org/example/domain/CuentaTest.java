@@ -3,8 +3,10 @@ package org.example.domain;
 import org.example.exceptions.SaldoInsuficienteException;
 import org.example.exceptions.SaldoNegativoException;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import java.math.BigDecimal;
+import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,13 +14,14 @@ class CuentaTest {
     Cuenta cuenta;
 
     @BeforeEach
-    void initTest(){
+    void initTest() {
         System.out.println("iniciando el metodo");
-        this.cuenta = new Cuenta("Andres", new BigDecimal("2500"));;
+        this.cuenta = new Cuenta("Andres", new BigDecimal("2500"));
+        ;
     }
 
     @AfterEach
-    void finishTest(){
+    void finishTest() {
         System.out.println("finalizando el metodo de prueba");
     }
 
@@ -139,5 +142,16 @@ class CuentaTest {
                             .anyMatch(c -> c.getPersona().equals("Andres")));
                 }
         );
+    }
+
+    @Test
+    void imprimirSystemProperties() {
+        Properties properties = System.getProperties();
+        properties.forEach((key, value) -> System.out.println(key + ":" + value));
+    }
+
+    @Test
+    @EnabledIfSystemProperty(named = "java.version", matches = "17.0.11")
+    void testJavaVersion() {
     }
 }
