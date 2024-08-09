@@ -12,7 +12,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -282,6 +284,30 @@ class CuentaTest {
                 Cuenta cuenta = new Cuenta();
                 cuenta.setPersona("Daniel");
                 assertEquals("Daniel", cuenta.getPersona(), "El nombre de la cuenta no es el que se esperaba");
+            });
+
+        }
+    }
+
+    @Nested
+    @Tag("timeout")
+    class EjemploTimeOutTest {
+        @Test
+        @Timeout(6)
+        void pruebaTimeOut() throws InterruptedException{
+            TimeUnit.SECONDS.sleep(6) ;
+        }
+
+        @Test
+        @Timeout(value = 6000, unit = TimeUnit.MILLISECONDS)
+        void pruebaTimeOut2() throws InterruptedException{
+            TimeUnit.SECONDS.sleep(6) ;
+        }
+
+        @Test
+        void pruebaTimeOut3() throws InterruptedException {
+            assertTimeout(Duration.ofSeconds(5000), () -> {
+                    TimeUnit.SECONDS.sleep(5) ;
             });
 
         }
